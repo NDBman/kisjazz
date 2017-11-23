@@ -1,0 +1,6 @@
+### Eclipse ###
+**/.project
+**/.settings/
+
+### macOS ###
+**/.DS_Store
