@@ -2,5 +2,8 @@
 **/.project
 **/.settings/
 
+### Maven ###
+**/target
+
 ### macOS ###
 **/.DS_Store
