@@ -4,11 +4,15 @@
 	<parent>
 		<groupId>hu.berryweb.kisjazz</groupId>
 		<artifactId>kisjazz</artifactId>
-		<version>${app.version}</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>kisjazz-web</artifactId>
-	
+
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>hu.berryweb.kisjazz</groupId>
 			<artifactId>kisjazz-service</artifactId>
