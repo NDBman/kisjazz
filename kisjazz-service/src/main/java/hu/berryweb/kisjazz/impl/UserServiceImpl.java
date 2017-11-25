@@ -1,5 +1,7 @@
 package hu.berryweb.kisjazz.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
@@ -18,9 +20,12 @@ public class UserServiceImpl implements IUserService {
 	
 	@Autowired
 	private ConversionService conversionService;
+	
+	private final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Override
 	public UserDto createUser(String username, String email, String password) {
+		LOG.debug("start");
 		UserEntity userEntity = UserEntity
 		        .builder()
 		        .username(username)
@@ -28,6 +33,7 @@ public class UserServiceImpl implements IUserService {
 		        .passwordHash(PasswordHasher.hash(password))
 		        .build();
 		userEntityRepository.save(userEntity);
+		LOG.debug("stop");
 		return conversionService.convert(userEntity, UserDto.class);
 	}
 
