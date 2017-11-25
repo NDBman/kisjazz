@@ -1,6 +1,10 @@
 ### Eclipse ###
 **/.project
 **/.settings/
+**/.classpath
+
+### Maven ###
+**/target
 
 ### macOS ###
 **/.DS_Store
