@@ -11,12 +11,12 @@ import hu.berryweb.kisjazz.controller.IUserRestController;
 import hu.berryweb.kisjazz.dto.UserDto;
 
 @RestController
-public class UserRestController implements IUserRestController {
+public class UserRestControllerImpl implements IUserRestController {
 
 	@Autowired
 	private IUserService service;
 
-	private final Logger LOG = LoggerFactory.getLogger(UserRestController.class);
+	private final Logger LOG = LoggerFactory.getLogger(UserRestControllerImpl.class);
 
 	@Override
 	public UserDto createUser(String username, String email, String password) {
