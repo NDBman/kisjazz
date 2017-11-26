@@ -8,4 +8,5 @@ import hu.berryweb.kisjazz.entity.UserEntity;
 @Repository
 public interface UserEntityRepository extends JpaRepository<UserEntity, Long> {
 
+	UserEntity findByEmail(String email);
 }

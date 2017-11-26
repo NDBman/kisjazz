@@ -7,12 +7,16 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>kisjazz-service</artifactId>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>hu.berryweb.kisjazz</groupId>
 			<artifactId>kisjazz-data</artifactId>
 			<version>${app.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
 		</dependency>
 	</dependencies>
 </project>

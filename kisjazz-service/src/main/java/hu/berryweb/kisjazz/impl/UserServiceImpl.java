@@ -11,30 +11,32 @@ import hu.berryweb.kisjazz.dto.UserDto;
 import hu.berryweb.kisjazz.entity.UserEntity;
 import hu.berryweb.kisjazz.repository.UserEntityRepository;
 import hu.berryweb.kisjazz.util.PasswordHasher;
+import hu.berryweb.kisjazz.validator.IUserValidator;
 
 @Service
 public class UserServiceImpl implements IUserService {
 
 	@Autowired
 	private UserEntityRepository userEntityRepository;
-	
+
 	@Autowired
 	private ConversionService conversionService;
-	
+
+	@Autowired
+	private IUserValidator validator;
+
 	private final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Override
 	public UserDto createUser(String username, String email, String password) {
 		LOG.debug("start");
-		UserEntity userEntity = UserEntity
-		        .builder()
-		        .username(username)
-		        .email(email)
-		        .passwordHash(PasswordHasher.hash(password))
-		        .build();
-		userEntityRepository.save(userEntity);
+		UserEntity userEntity = UserEntity.builder().username(username).email(email)
+		        .passwordHash(PasswordHasher.hash(password)).build();
+		validator.validateUser(userEntity);
+		userEntity = userEntityRepository.save(userEntity);
+		UserDto userDto = conversionService.convert(userEntity, UserDto.class);
 		LOG.debug("stop");
-		return conversionService.convert(userEntity, UserDto.class);
+		return userDto;
 	}
 
 	@Override
@@ -52,9 +54,11 @@ public class UserServiceImpl implements IUserService {
 		UserEntity userEntity = userEntityRepository.findOne(userId);
 		userEntity.setEmail(email);
 		userEntity.setPasswordHash(PasswordHasher.hash(password));
+		validator.validateUser(userEntity);
 		userEntity = userEntityRepository.save(userEntity);
+		UserDto userDto = conversionService.convert(userEntity, UserDto.class);
 		LOG.debug("stop");
-		return conversionService.convert(userEntity, UserDto.class);
+		return userDto;
 	}
 
 }
