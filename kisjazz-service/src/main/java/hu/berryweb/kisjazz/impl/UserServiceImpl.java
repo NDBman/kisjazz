@@ -37,4 +37,24 @@ public class UserServiceImpl implements IUserService {
 		return conversionService.convert(userEntity, UserDto.class);
 	}
 
+	@Override
+	public UserDto findUser(Long userId) {
+		LOG.debug("start");
+		UserEntity userEntity = userEntityRepository.findOne(userId);
+		UserDto userDto = conversionService.convert(userEntity, UserDto.class);
+		LOG.debug("stop");
+		return userDto;
+	}
+
+	@Override
+	public UserDto editUser(Long userId, String email, String password) {
+		LOG.debug("start");
+		UserEntity userEntity = userEntityRepository.findOne(userId);
+		userEntity.setEmail(email);
+		userEntity.setPasswordHash(PasswordHasher.hash(password));
+		userEntity = userEntityRepository.save(userEntity);
+		LOG.debug("stop");
+		return conversionService.convert(userEntity, UserDto.class);
+	}
+
 }
