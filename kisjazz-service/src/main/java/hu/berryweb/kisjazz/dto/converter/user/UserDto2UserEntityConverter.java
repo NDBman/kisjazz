@@ -1,4 +1,4 @@
-package hu.berryweb.kisjazz.dto.converter;
+package hu.berryweb.kisjazz.dto.converter.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,7 @@ import hu.berryweb.kisjazz.dto.UserDto;
 import hu.berryweb.kisjazz.entity.UserEntity;
 
 @Service
-public class UserDto2UserEntity implements Converter<UserDto, UserEntity> {
+public class UserDto2UserEntityConverter implements Converter<UserDto, UserEntity> {
 
 	private final Logger LOG = LoggerFactory.getLogger("hu.berryweb.kisjazz");
 	
@@ -19,7 +19,7 @@ public class UserDto2UserEntity implements Converter<UserDto, UserEntity> {
 		UserEntity userEntity = UserEntity
 				.builder()
 				.id(source.getId())
-				.username(source.getUsername())
+				.name(source.getName())
 				.email(source.getEmail())
 				.passwordHash(source.getPasswordHash())
 				.build();

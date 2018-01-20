@@ -6,7 +6,7 @@
 		<artifactId>kisjazz</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>kisjazz-web</artifactId>
+	<artifactId>kisjazz-rest</artifactId>
 
 	<dependencies>
 		<dependency>

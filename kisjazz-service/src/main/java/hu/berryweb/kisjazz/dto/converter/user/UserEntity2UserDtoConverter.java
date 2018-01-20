@@ -1,4 +1,4 @@
-package hu.berryweb.kisjazz.dto.converter;
+package hu.berryweb.kisjazz.dto.converter.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ public class UserEntity2UserDtoConverter implements Converter<UserEntity, UserDt
 		UserDto userDto = UserDto
 				.builder()
 				.id(source.getId())
-				.username(source.getUsername())
+				.name(source.getName())
 				.email(source.getEmail())
 				.passwordHash(source.getPasswordHash())
 				.build();

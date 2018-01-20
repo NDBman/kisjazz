@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 public interface IExceptionController {
 
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(IllegalArgumentException.class)
 	public void handleBadRequest(Exception e);
 	

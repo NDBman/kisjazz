@@ -8,7 +8,7 @@
 	<modules>
 		<module>kisjazz-data</module>
 		<module>kisjazz-service</module>
-		<module>kisjazz-web</module>
+		<module>kisjazz-rest</module>
 	</modules>
 
 	<parent>
@@ -30,7 +30,13 @@
 				<artifactId>commons-lang3</artifactId>
 				<version>3.7</version>
 			</dependency>
+			<dependency>
+				<groupId>com.auth0</groupId>
+				<artifactId>java-jwt</artifactId>
+				<version>3.3.0</version>
+			</dependency>
 		</dependencies>
+		
 	</dependencyManagement>
 
 </project>
