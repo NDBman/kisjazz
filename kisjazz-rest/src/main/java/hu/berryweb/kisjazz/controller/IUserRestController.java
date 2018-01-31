@@ -1,46 +1,67 @@
 package hu.berryweb.kisjazz.controller;
 
+import hu.berryweb.kisjazz.dto.TrackDto;
+import hu.berryweb.kisjazz.dto.UserDto;
+import org.springframework.web.bind.annotation.*;
+
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import hu.berryweb.kisjazz.dto.AuthenticationTokenDto;
-import hu.berryweb.kisjazz.dto.MusicDto;
-import hu.berryweb.kisjazz.dto.UserDto;
-
+/**
+ * @author Nandi
+ */
 @RequestMapping("/users")
 public interface IUserRestController {
 
-	@CrossOrigin
-	@PostMapping
-	UserDto createUser(@RequestAttribute("name") String name, @RequestAttribute("email") String email,
-	        @RequestAttribute("password") String password);
+    /**
+     *
+     * @param name
+     * @param email
+     * @param password
+     * @return
+     */
+    @CrossOrigin
+    @PostMapping
+    UserDto createUser(@RequestAttribute("name") String name, @RequestAttribute("email") String email,
+                       @RequestAttribute("password") String password);
 
-	@GetMapping("/{userId}")
-	UserDto findUser(@PathVariable("userId") Long userId);
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    @GetMapping("/{userId}")
+    UserDto findUser(@PathVariable("userId") Long userId);
 
-	@PutMapping("/{userId}")
-	UserDto editUser(@PathVariable("userId") Long userId, @RequestAttribute("email") String email,
-	        @RequestAttribute("password") String password);
-	
-	@CrossOrigin
-	@PostMapping("/authenticate")
-	AuthenticationTokenDto authenticatieUser(@RequestAttribute("email") String email, @RequestAttribute("password") String password)
-	        throws IllegalArgumentException, UnsupportedEncodingException;
-	
-	@CrossOrigin
-	@PostMapping("/favorites/add/{spotifyId}")
-	MusicDto addMusicToFavorites(@RequestHeader("Authorization") String authorizationHeader, @PathVariable("spotifyId") String spotifyId) throws IllegalArgumentException, UnsupportedEncodingException;
-	
-	@CrossOrigin
-	@GetMapping("/favorites")
-	List<MusicDto> getMusicsOfUser(@RequestHeader String Authorization) throws IllegalArgumentException, UnsupportedEncodingException;
+    /**
+     *
+     * @param userId
+     * @param email
+     * @param password
+     * @return
+     */
+    @PutMapping("/{userId}")
+    UserDto editUser(@PathVariable("userId") Long userId, @RequestAttribute("email") String email,
+                     @RequestAttribute("password") String password);
+
+    /**
+     *
+     * @param Authorization
+     * @param spotifyId
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    @CrossOrigin
+    @PostMapping("/favorites/add/{spotifyId}")
+    TrackDto addTrackToFavorites(@RequestHeader String Authorization, @PathVariable("spotifyId") String spotifyId) throws UnsupportedEncodingException;
+
+    /**
+     * @param Authorization
+     * @return
+     */
+    @CrossOrigin
+    @GetMapping("/favorites")
+    List<TrackDto> getFavorites(@RequestHeader String Authorization) throws UnsupportedEncodingException;
+
+
 }

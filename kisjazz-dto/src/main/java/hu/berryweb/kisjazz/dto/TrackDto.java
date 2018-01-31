@@ -7,11 +7,12 @@ import lombok.Data;
 
 @Builder
 @Data
-public class MusicDto {
+public class TrackDto {
 
 	@SerializedName("id")
 	private Long id;
 
 	@SerializedName("spotifyId")
 	private String spotifyId;
+
 }

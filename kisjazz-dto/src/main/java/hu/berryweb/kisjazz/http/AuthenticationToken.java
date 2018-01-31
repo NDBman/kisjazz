@@ -1,28 +1,27 @@
-package hu.berryweb.kisjazz.dto;
+package hu.berryweb.kisjazz.http;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class AuthenticationTokenDto {
+public class AuthenticationToken {
 
-	@SerializedName("access_token")
 	@Expose
+	@SerializedName("access_token")
 	private String accessToken;
 
-	@SerializedName("token_type")
 	@Expose
+	@SerializedName("token_type")
 	private String tokenType;
 
-	@SerializedName("expires_in")
 	@Expose
+	@SerializedName("expires_in")
 	private Integer expiresIn;
 
-	@SerializedName("scope")
 	@Expose
-	private String scope;
+	@SerializedName("refresh_token")
+	private String refreshToken;
 }

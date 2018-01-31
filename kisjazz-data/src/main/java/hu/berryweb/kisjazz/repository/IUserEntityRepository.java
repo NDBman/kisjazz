@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import hu.berryweb.kisjazz.entity.UserEntity;
 
 @Repository
-public interface UserEntityRepository extends JpaRepository<UserEntity, Long> {
+public interface IUserEntityRepository extends JpaRepository<UserEntity, Long> {
 
 	UserEntity findByEmail(String email);
 }

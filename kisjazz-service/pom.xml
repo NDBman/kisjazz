@@ -11,7 +11,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>hu.berryweb.kisjazz</groupId>
-			<artifactId>kisjazz-data</artifactId>
+			<artifactId>kisjazz-dto</artifactId>
 			<version>${app.version}</version>
 		</dependency>
 		<dependency>

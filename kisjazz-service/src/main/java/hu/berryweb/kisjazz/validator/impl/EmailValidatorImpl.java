@@ -5,14 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import hu.berryweb.kisjazz.repository.UserEntityRepository;
+import hu.berryweb.kisjazz.repository.IUserEntityRepository;
 import hu.berryweb.kisjazz.validator.IEmailValidator;
 
 @Service
 public class EmailValidatorImpl implements IEmailValidator {
 
 	@Autowired
-	private UserEntityRepository userEntityRepository;
+	private IUserEntityRepository IUserEntityRepository;
 
 	private final String EMAIL_PATTERN = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\""
 	        + "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-"
@@ -28,7 +28,7 @@ public class EmailValidatorImpl implements IEmailValidator {
 
 	@Override
 	public void checkEmailNotExists(String email) {
-		if (userEntityRepository.findByEmail(email) != null) {
+		if (IUserEntityRepository.findByEmail(email) != null) {
 			throw new DataIntegrityViolationException("Email is already in use.");
 		}
 	}

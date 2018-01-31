@@ -7,6 +7,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>kisjazz-data</module>
+		<module>kisjazz-dto</module>
 		<module>kisjazz-service</module>
 		<module>kisjazz-rest</module>
 	</modules>
