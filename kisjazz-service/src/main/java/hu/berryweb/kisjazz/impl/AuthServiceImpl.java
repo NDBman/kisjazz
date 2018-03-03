@@ -12,6 +12,7 @@ import hu.berryweb.kisjazz.IValidatorService;
 import hu.berryweb.kisjazz.entity.UserEntity;
 import hu.berryweb.kisjazz.exception.AccessTokenExpiredException;
 import hu.berryweb.kisjazz.exception.RefreshTokenExpiredException;
+import hu.berryweb.kisjazz.exception.AuthenticationException;
 import hu.berryweb.kisjazz.http.AuthenticationToken;
 import hu.berryweb.kisjazz.http.request.RefreshTokenRequest;
 import hu.berryweb.kisjazz.repository.IUserEntityRepository;
@@ -40,43 +41,44 @@ public class AuthServiceImpl extends AbstractService implements IAuthService {
     private final String CLIENT_SECRET = "secret";
     private final String REFRESH_TOKEN_SECRET = "rsecret";
 
+    private final Integer ACCESS_EXPIRES_IN = 10;
+    private final Integer REFRESH_EXPIRES_IN = ACCESS_EXPIRES_IN * 10;
+
     @Override
     public AuthenticationToken authenticateUser(String email, String password) throws UnsupportedEncodingException {
         log.debug("start");
-        validatorService.checkEmailNotBlank(email);
-        validatorService.checkEmailPattern(email);
-        validatorService.checkPasswordIsValid(password);
         UserEntity userEntity = IUserEntityRepository.findByEmail(email);
         if (userEntity != null && userEntity.getPasswordHash().equals(PasswordHasher.hash(password))) {
             log.debug("create authentication dto.");
             AuthenticationToken authToken = createAuthenticationToken(userEntity.getId());
             return authToken;
         }
-        log.debug("stop - return null");
-        return null;
+        throw new AuthenticationException("Hibás e-mail cím vagy jelszó!");
     }
 
     private AuthenticationToken createAuthenticationToken(Long userId) throws UnsupportedEncodingException {
-        Calendar now = Calendar.getInstance();
-        now.add(Calendar.MINUTE, 1);
+        Calendar nowAccess = Calendar.getInstance();
+        Calendar nowRefresh = Calendar.getInstance();
+        nowAccess.add(Calendar.SECOND, ACCESS_EXPIRES_IN);
         Algorithm algorithmAT = Algorithm.HMAC256(CLIENT_SECRET);
         String accessToken = JWT.create()
                 .withIssuer("auth0")
                 .withClaim("uid", userId)
-                .withExpiresAt(now.getTime())
+                .withExpiresAt(nowAccess.getTime())
                 .sign(algorithmAT);
         Random random = new Random();
         Algorithm algorithmRT = Algorithm.HMAC256(REFRESH_TOKEN_SECRET);
-        now.add(Calendar.MINUTE, 2);
+        nowRefresh.add(Calendar.SECOND, REFRESH_EXPIRES_IN);
         String refreshToken = JWT.create()
                 .withIssuer("auth0")
-                .withExpiresAt(now.getTime())
+                .withExpiresAt(nowAccess.getTime())
                 .withClaim("uid", userId)
                 .withClaim("rn", random.nextDouble())
                 .sign(algorithmRT);
         AuthenticationToken authToken = AuthenticationToken.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .expiresIn(ACCESS_EXPIRES_IN)
                 .tokenType("Bearer")
                 .build();
         return authToken;

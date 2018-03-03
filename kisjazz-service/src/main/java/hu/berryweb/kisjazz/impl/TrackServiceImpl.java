@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by Nandi on 2018. 01. 23..
  */
@@ -30,7 +32,7 @@ public class TrackServiceImpl extends AbstractDtoService<TrackEntity, TrackDto> 
     }
 
     @Override
-    public TrackDto createTrack(String spotifyId, UserEntity userEntity) {
+    public List<TrackDto> createTrack(String spotifyId, UserEntity userEntity) {
         log.debug("start");
         TrackEntity trackEntity = TrackEntity.builder()
                 .spotifyId(spotifyId)
@@ -39,10 +41,26 @@ public class TrackServiceImpl extends AbstractDtoService<TrackEntity, TrackDto> 
         userEntity.getFavorites().add(trackEntity);
         trackEntity = trackEntityRepository.save(trackEntity);
         userEntityRepository.save(userEntity);
-        TrackDto trackDto = convertEntity(trackEntity);
+        List<TrackDto> trackDtos = convertEntityList(userEntity.getFavorites());
         log.debug("stop");
-        return trackDto;
+        return trackDtos;
 
+    }
+
+    @Override
+    public List<TrackDto> removeTrack(String spotifyId, Long userId) {
+        log.debug("start");
+        TrackEntity trackEntity = trackEntityRepository.findBySpotifyId(spotifyId);
+        log.debug("delete track entity. spotifyId - " + spotifyId);
+        log.debug("find user by id.");
+        UserEntity userEntity = userEntityRepository.findOne(userId);
+        userEntity.getFavorites().remove(trackEntity);
+        userEntityRepository.save(userEntity);
+        trackEntityRepository.delete(trackEntity);
+        log.debug("get users' tracks. email - " + userEntity.getEmail());
+        List<TrackEntity> trackEntityList = trackEntityRepository.findByUserEntity(userEntity);
+        log.debug("stop");
+        return convertEntityList(trackEntityList);
     }
 
 }

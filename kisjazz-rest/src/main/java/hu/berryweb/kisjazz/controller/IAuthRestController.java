@@ -17,7 +17,7 @@ import java.io.UnsupportedEncodingException;
 @RequestMapping(value = "/auth",
         consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
         produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
-public interface IAuthController {
+public interface IAuthRestController {
 
     @CrossOrigin
     @PostMapping("/authenticate")

@@ -53,7 +53,7 @@ public interface IUserRestController {
      */
     @CrossOrigin
     @PostMapping("/favorites/add/{spotifyId}")
-    TrackDto addTrackToFavorites(@RequestHeader String Authorization, @PathVariable("spotifyId") String spotifyId) throws UnsupportedEncodingException;
+    List<TrackDto> addTrackToFavorites(@RequestHeader String Authorization, @PathVariable("spotifyId") String spotifyId) throws UnsupportedEncodingException;
 
     /**
      * @param Authorization
@@ -62,6 +62,10 @@ public interface IUserRestController {
     @CrossOrigin
     @GetMapping("/favorites")
     List<TrackDto> getFavorites(@RequestHeader String Authorization) throws UnsupportedEncodingException;
+
+    @CrossOrigin
+    @DeleteMapping("/favorites/remove/{spotifyId}")
+    List<TrackDto> removeTrack(@RequestHeader String Authorization, @PathVariable("spotifyId") String spotifyId) throws UnsupportedEncodingException;
 
 
 }

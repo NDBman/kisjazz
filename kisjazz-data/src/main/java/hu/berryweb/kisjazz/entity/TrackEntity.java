@@ -20,7 +20,7 @@ public class TrackEntity {
     @Column(name = "SPOTIFY_ID",nullable = false, unique = true)
     private String spotifyId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity userEntity;
 }

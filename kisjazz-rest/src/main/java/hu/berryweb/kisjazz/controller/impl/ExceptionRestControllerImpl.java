@@ -31,4 +31,10 @@ public class ExceptionRestControllerImpl implements IExceptionController {
         //Do nothing
     }
 
+    @Override
+    public ErrorInfo handleAuthenticationException(Exception e) {
+        log.debug("Bad login credentials.");
+        return new ErrorInfo(e);
+    }
+
 }

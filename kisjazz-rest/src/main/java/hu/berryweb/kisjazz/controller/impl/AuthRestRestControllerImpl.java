@@ -1,13 +1,12 @@
 package hu.berryweb.kisjazz.controller.impl;
 
 import hu.berryweb.kisjazz.IAuthService;
-import hu.berryweb.kisjazz.controller.IAuthController;
+import hu.berryweb.kisjazz.controller.IAuthRestController;
 import hu.berryweb.kisjazz.http.AuthenticationToken;
 import hu.berryweb.kisjazz.http.request.LoginRequest;
 import hu.berryweb.kisjazz.http.request.RefreshTokenRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
@@ -17,7 +16,7 @@ import java.io.UnsupportedEncodingException;
  */
 @Slf4j
 @RestController
-public class AuthRestControllerImpl implements IAuthController {
+public class AuthRestRestControllerImpl implements IAuthRestController {
 
     @Autowired
     private IAuthService authService;

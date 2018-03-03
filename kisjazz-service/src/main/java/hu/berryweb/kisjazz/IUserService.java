@@ -37,7 +37,7 @@ public interface IUserService {
      * @return
      * @throws UnsupportedEncodingException
      */
-    TrackDto addTrackToFavorites(String spotifyId, Long userId) throws UnsupportedEncodingException;
+    List<TrackDto> addTrackToFavorites(String spotifyId, Long userId) throws UnsupportedEncodingException;
 
     /**
      * @param userId

@@ -66,13 +66,13 @@ public class UserServiceImpl extends AbstractDtoService<UserEntity, UserDto> imp
     }
 
     @Override
-    public TrackDto addTrackToFavorites(String spotifyId, Long userId) throws UnsupportedEncodingException {
+    public List<TrackDto> addTrackToFavorites(String spotifyId, Long userId) throws UnsupportedEncodingException {
         log.debug("start");
         UserEntity userEntity = userEntityRepository.findOne(userId);
         log.debug("create trackDto");
-        TrackDto trackDto = trackService.createTrack(spotifyId, userEntity);
+        List<TrackDto> trackDtos = trackService.createTrack(spotifyId, userEntity);
         log.debug("stop");
-        return trackDto;
+        return trackDtos;
     }
 
     @Override

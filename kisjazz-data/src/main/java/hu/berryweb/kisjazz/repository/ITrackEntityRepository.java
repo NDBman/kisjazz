@@ -12,4 +12,6 @@ import hu.berryweb.kisjazz.entity.UserEntity;
 public interface ITrackEntityRepository extends JpaRepository<TrackEntity, Long> {
 
 	List<TrackEntity> findByUserEntity(UserEntity userEntity);
+
+	TrackEntity findBySpotifyId(String spotifyId);
 }

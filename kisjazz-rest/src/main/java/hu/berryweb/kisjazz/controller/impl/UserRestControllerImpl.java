@@ -1,17 +1,16 @@
 package hu.berryweb.kisjazz.controller.impl;
 
 import hu.berryweb.kisjazz.IAuthService;
+import hu.berryweb.kisjazz.ITrackService;
 import hu.berryweb.kisjazz.IUserService;
 import hu.berryweb.kisjazz.controller.IUserRestController;
 import hu.berryweb.kisjazz.dto.TrackDto;
 import hu.berryweb.kisjazz.dto.UserDto;
-import hu.berryweb.kisjazz.http.request.TrackRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import retrofit2.http.Body;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -25,6 +24,9 @@ public class UserRestControllerImpl implements IUserRestController {
 
     @Autowired
     private IAuthService authService;
+
+    @Autowired
+    private ITrackService trackService;
 
     /**
      *
@@ -81,12 +83,12 @@ public class UserRestControllerImpl implements IUserRestController {
      * @throws UnsupportedEncodingException
      */
     @Override
-    public TrackDto addTrackToFavorites(@RequestHeader String Authorization, @PathVariable("spotifyId") String spotifyId) throws UnsupportedEncodingException {
+    public List<TrackDto> addTrackToFavorites(@RequestHeader String Authorization, @PathVariable("spotifyId") String spotifyId) throws UnsupportedEncodingException {
         log.debug("start");
         Long userId = authService.authorizeUser(Authorization);
-        TrackDto trackDto = service.addTrackToFavorites(spotifyId, userId);
+        List<TrackDto> trackDtos = service.addTrackToFavorites(spotifyId, userId);
         log.debug("stop");
-        return trackDto;
+        return trackDtos;
     }
 
     /**
@@ -101,6 +103,15 @@ public class UserRestControllerImpl implements IUserRestController {
         List<TrackDto> trackDtos = service.getFavorites(userId);
         log.debug("stop");
         return trackDtos;
+    }
+
+    @Override
+    public List<TrackDto> removeTrack(@RequestHeader String Authorization, @PathVariable("spotifyId") String spotifyId) throws UnsupportedEncodingException {
+        log.debug("start");
+        Long userId = authService.authorizeUser((Authorization));
+        List<TrackDto> trackDtoList = trackService.removeTrack(spotifyId, userId);
+        log.debug("stop");
+        return trackDtoList;
     }
 
 
