@@ -41,7 +41,7 @@ public class AuthServiceImpl extends AbstractService implements IAuthService {
     private final String CLIENT_SECRET = "secret";
     private final String REFRESH_TOKEN_SECRET = "rsecret";
 
-    private final Integer ACCESS_EXPIRES_IN = 10;
+    private final Integer ACCESS_EXPIRES_IN = 3600;
     private final Integer REFRESH_EXPIRES_IN = ACCESS_EXPIRES_IN * 10;
 
     @Override
