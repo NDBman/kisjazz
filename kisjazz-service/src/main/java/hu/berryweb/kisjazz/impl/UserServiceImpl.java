@@ -1,64 +1,91 @@
 package hu.berryweb.kisjazz.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import hu.berryweb.kisjazz.AbstractDtoService;
+import hu.berryweb.kisjazz.ITrackService;
+import hu.berryweb.kisjazz.IUserService;
+import hu.berryweb.kisjazz.dto.TrackDto;
+import hu.berryweb.kisjazz.dto.UserDto;
+import hu.berryweb.kisjazz.entity.TrackEntity;
+import hu.berryweb.kisjazz.entity.UserEntity;
+import hu.berryweb.kisjazz.repository.IUserEntityRepository;
+import hu.berryweb.kisjazz.util.PasswordHasher;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.stereotype.Service;
 
-import hu.berryweb.kisjazz.IUserService;
-import hu.berryweb.kisjazz.dto.UserDto;
-import hu.berryweb.kisjazz.entity.UserEntity;
-import hu.berryweb.kisjazz.repository.UserEntityRepository;
-import hu.berryweb.kisjazz.util.PasswordHasher;
-import hu.berryweb.kisjazz.validator.IUserValidator;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 
+@Slf4j
 @Service
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl extends AbstractDtoService<UserEntity, UserDto> implements IUserService {
 
-	@Autowired
-	private UserEntityRepository userEntityRepository;
+    @Autowired
+    private IUserEntityRepository userEntityRepository;
 
-	@Autowired
-	private ConversionService conversionService;
+    @Autowired
+    private ITrackService trackService;
 
-	@Autowired
-	private IUserValidator validator;
+    public UserServiceImpl() {
+        super(UserEntity.class, UserDto.class);
+    }
 
-	private final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
+    @Override
+    public UserDto createUser(String name, String email, String password) {
+        log.debug("start");
+        UserEntity userEntity = UserEntity.builder().name(name).email(email).passwordHash(PasswordHasher.hash(password))
+                .build();
+        validatorService.validateUser(userEntity);
+        userEntity = userEntityRepository.save(userEntity);
+        UserDto userDto = convertEntity(userEntity);
+        log.debug("stop");
+        return userDto;
+    }
 
-	@Override
-	public UserDto createUser(String username, String email, String password) {
-		LOG.debug("start");
-		UserEntity userEntity = UserEntity.builder().username(username).email(email)
-		        .passwordHash(PasswordHasher.hash(password)).build();
-		validator.validateUser(userEntity);
-		userEntity = userEntityRepository.save(userEntity);
-		UserDto userDto = conversionService.convert(userEntity, UserDto.class);
-		LOG.debug("stop");
-		return userDto;
-	}
+    @Override
+    public UserDto findUser(Long userId) {
+        log.debug("start");
+        UserEntity userEntity = userEntityRepository.findOne(userId);
+        UserDto userDto = convertEntity(userEntity);
+        log.debug("stop");
+        return userDto;
+    }
 
-	@Override
-	public UserDto findUser(Long userId) {
-		LOG.debug("start");
-		UserEntity userEntity = userEntityRepository.findOne(userId);
-		UserDto userDto = conversionService.convert(userEntity, UserDto.class);
-		LOG.debug("stop");
-		return userDto;
-	}
+    @Override
+    public UserDto editUser(Long userId, String email, String password) {
+        log.debug("start");
+        UserEntity userEntity = userEntityRepository.findOne(userId);
+        userEntity.setEmail(email);
+        userEntity.setPasswordHash(PasswordHasher.hash(password));
+        validatorService.validateUser(userEntity);
+        userEntity = userEntityRepository.save(userEntity);
+        UserDto userDto = convertEntity(userEntity);
+        log.debug("stop");
+        return userDto;
+    }
 
-	@Override
-	public UserDto editUser(Long userId, String email, String password) {
-		LOG.debug("start");
-		UserEntity userEntity = userEntityRepository.findOne(userId);
-		userEntity.setEmail(email);
-		userEntity.setPasswordHash(PasswordHasher.hash(password));
-		validator.validateUser(userEntity);
-		userEntity = userEntityRepository.save(userEntity);
-		UserDto userDto = conversionService.convert(userEntity, UserDto.class);
-		LOG.debug("stop");
-		return userDto;
-	}
+    @Override
+    public List<TrackDto> addTrackToFavorites(String spotifyId, Long userId) throws UnsupportedEncodingException {
+        log.debug("start");
+        UserEntity userEntity = userEntityRepository.findOne(userId);
+        log.debug("create trackDto");
+        List<TrackDto> trackDtos = trackService.createTrack(spotifyId, userEntity);
+        log.debug("stop");
+        return trackDtos;
+    }
+
+    @Override
+    public List<TrackDto> getFavorites(Long userId) {
+        log.debug("start");
+        UserEntity userEntity = userEntityRepository.findOne(userId);
+        List<TrackEntity> favoriteEntites = userEntity.getFavorites();
+        log.debug("convert track dtos");
+        List<TrackDto> favoriteDtos = (List<TrackDto>) conversionService.convert(favoriteEntites,
+                TypeDescriptor.collection(List.class, TypeDescriptor.valueOf(TrackEntity.class)),
+                TypeDescriptor.collection(List.class, TypeDescriptor.valueOf(TrackDto.class)));
+        log.debug("stop");
+        return favoriteDtos;
+    }
 
 }

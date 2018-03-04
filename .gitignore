@@ -11,3 +11,7 @@
 
 ### Logger ###
 **/log/*.log
+
+### Idea ###
+.idea
+*.iml
