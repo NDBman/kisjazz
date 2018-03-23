@@ -4,6 +4,7 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import hu.berryweb.kisjazz.exception.AccessTokenExpiredException;
 import hu.berryweb.kisjazz.exception.RefreshTokenExpiredException;
 import hu.berryweb.kisjazz.exception.AuthenticationException;
+import hu.berryweb.kisjazz.exception.TooEarlyPlayItemRequestException;
 import hu.berryweb.kisjazz.http.response.ErrorInfo;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -34,4 +35,8 @@ public interface IExceptionController {
     @ExceptionHandler(AuthenticationException.class)
     @ResponseBody
     ErrorInfo handleAuthenticationException(Exception e);
+
+    @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+    @ExceptionHandler(TooEarlyPlayItemRequestException.class)
+    void handleTooEarlyPlayItemRequest(Exception e);
 }
