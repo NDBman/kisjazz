@@ -37,4 +37,9 @@ public class ExceptionRestControllerImpl implements IExceptionController {
         return new ErrorInfo(e);
     }
 
+    @Override
+    public void handleTooEarlyPlayItemRequest(Exception e) {
+        //Do nothing
+    }
+
 }
