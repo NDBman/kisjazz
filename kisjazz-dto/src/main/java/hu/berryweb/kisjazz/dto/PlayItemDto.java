@@ -22,6 +22,6 @@ public class PlayItemDto {
     @SerializedName("requestDate")
     private Date requestDate;
 
-    @SerializedName("isPlaying")
+    @SerializedName("playing")
     private Boolean playing;
 }
